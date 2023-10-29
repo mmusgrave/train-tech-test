@@ -59,7 +59,7 @@ get_average,Paradise,Cambridge
 get_average,Leyton,Waterloo
 check_in,10,Leyton,24
 get_average,Leyton,Waterloo
-check_in,10,Waterloo,38
+check_in,10,Waterloo,38 <------ Should this be check_out? ***********
 get_average,Leyton,Waterloo
 ```
 
