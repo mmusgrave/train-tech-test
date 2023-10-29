@@ -34,4 +34,14 @@ RSpec.describe UndergroundSystem do
     ans = tube.get_average_time('Leyton', 'Waterloo')
     expect(ans).to eq 12
   end
+
+  it 'properly checks in a customer' do
+  end
+  it 'does not allow for multiple check ins at once' do
+  end
+  end
+  it 'properly checks out a customer' do
+  end
+  it 'properly gets average distance' do
+  end
 end
