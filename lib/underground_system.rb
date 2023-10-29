@@ -1,5 +1,3 @@
-# require 'ostruct'
-
 class UndergroundSystem
   #start with int then make it float
 
