@@ -39,7 +39,6 @@ RSpec.describe UndergroundSystem do
   end
   it 'does not allow for multiple check ins at once' do
   end
-  end
   it 'properly checks out a customer' do
   end
   it 'properly gets average distance' do
