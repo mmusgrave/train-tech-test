@@ -1,8 +1,5 @@
 require './lib/underground_system'
 
-RSpec.describe UndergroundTrip do
-end
-
 RSpec.describe UndergroundSystem do
   it 'works' do
     tube = UndergroundSystem.new
