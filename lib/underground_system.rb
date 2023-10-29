@@ -28,8 +28,8 @@ class UndergroundSystem
     return "This user has already been checked in" if @master_users_hash[id][:checked_in?] # TODO: error handling
 
     @master_users_hash[id][:checked_in?] = true
-    @master_users_hash[id][:trips] << {start_time: time, start_station: station_name}
-    # @master_users_hash[id][:trips] << UndergroundTrip.new(start_time: time, start_station: station_name)
+    # @master_users_hash[id][:trips] << {start_time: time, start_station: station_name}
+    @master_users_hash[id][:trips] << UndergroundTrip.new(start_time: time, start_station: station_name)
     # { checked_in?: true, trips: [UndergroundTrip.new(start_time: time, start_station: station)] }
 
 
@@ -96,7 +96,7 @@ class UndergroundTrip
   def qualifies?(other_start, other_end)
     # If the trip start and end stations match the start and end arguments, the trips qualifies
     # If there is any mismatch, the trip does not qualify
-    return false if !self.finished
+    return false if !self.finished?
     return ((@start_station == other_start && @end_station == other_end) ? true : false )
   end
 end
