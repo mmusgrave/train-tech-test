@@ -1,46 +1,80 @@
 require './lib/underground_system'
 
 RSpec.describe UndergroundSystem do
-  it 'works' do
+  it 'properly gets average distance' do
     tube = UndergroundSystem.new
-    tube.check_in(45, 'Leyton', 3)
-    tube.check_in(32, 'Paradise', 8)
-    tube.check_out(45, 'Waterloo', 15)
-    tube.check_out(32, 'Cambridge', 22)
-    ans = tube.get_average_time('Paradise', 'Cambridge')
+
+    tube.check_in(id: 10, station_name: 'Leyton', time: 1)
+    tube.check_out(id: 10, station_name: 'Waterloo', time: 2)
+
+    ans = tube.get_average_time(start_station: 'Leyton', end_station: 'Waterloo')
+    expect(ans).to eq 1
+  end
+
+  it 'properly gets demical average distance' do
+    tube = UndergroundSystem.new
+
+    tube.check_in(id: 10, station_name: 'Leyton', time: 1)
+    tube.check_out(id: 10, station_name: 'Waterloo', time: 2)
+    tube.check_in(id: 30, station_name: 'Leyton', time: 3)
+    tube.check_out(id: 30, station_name: 'Waterloo', time: 7)
+
+    ans = tube.get_average_time(start_station: 'Leyton', end_station: 'Waterloo')
+    expect(ans).to eq 2.5
+  end
+
+  it 'works on a simple example' do
+    tube = UndergroundSystem.new
+    tube.check_in(id: 45, station_name: 'Leyton', time: 3)
+    tube.check_in(id: 32, station_name: 'Paradise', time: 8)
+    tube.check_out(id: 45, station_name: 'Waterloo', time: 15)
+    tube.check_out(id: 32, station_name: 'Cambridge', time: 22)
+    ans = tube.get_average_time(start_station: 'Paradise', end_station: 'Cambridge')
     expect(ans).to eq 14
   end
 
-  it 'works on a more complicated example' do
+  it 'works on a more complicated example with a change of average' do
     tube = UndergroundSystem.new
 
-    tube.check_in(45, 'Leyton', 3)
-    tube.check_in(32, 'Paradise', 8)
-    tube.check_in(27, 'Leyton', 10)
+    tube.check_in(id: 45, station_name: 'Leyton', time: 3)
+    tube.check_in(id: 32, station_name: 'Paradise', time: 8)
+    tube.check_in(id: 27, station_name: 'Leyton', time: 10)
 
-    tube.check_out(45, 'Waterloo', 15)
-    tube.check_out(27, 'Waterloo', 20)
-    tube.check_out(32, 'Cambridge', 22)
+    tube.check_out(id: 45, station_name: 'Waterloo', time: 15)
+    tube.check_out(id: 27, station_name: 'Waterloo', time: 20)
+    tube.check_out(id: 32, station_name: 'Cambridge', time: 22)
 
-    ans = tube.get_average_time('Paradise', 'Cambridge')
+    ans = tube.get_average_time(start_station: 'Paradise', end_station: 'Cambridge')
     expect(ans).to eq 14
 
-    ans = tube.get_average_time('Leyton', 'Waterloo')
+    ans = tube.get_average_time(start_station: 'Leyton', end_station: 'Waterloo')
     expect(ans).to eq 11
 
-    tube.check_in(10, 'Leyton', 24)
-    tube.check_out(10, 'Waterloo', 38)
+    tube.check_in(id: 10, station_name: 'Leyton', time: 24)
+    tube.check_out(id: 10, station_name: 'Waterloo', time: 38)
 
-    ans = tube.get_average_time('Leyton', 'Waterloo')
+    ans = tube.get_average_time(start_station: 'Leyton', end_station: 'Waterloo')
     expect(ans).to eq 12
   end
 
-  it 'properly checks in a customer' do
+  it 'raises a CheckInError on double check in' do
+    tube = UndergroundSystem.new
+
+    tube.check_in(id: 10, station_name: 'Leyton', time: 1)
+    expect { tube.check_in(id: 10, station_name: 'Cambridge', time: 2) }.to raise_error(CheckInError)
   end
-  it 'does not allow for multiple check ins at once' do
+
+  it 'raises CheckOutError when there is no trip to check out' do
+    tube = UndergroundSystem.new
+
+    tube.check_in(id: 10, station_name: 'Leyton', time: 1)
+    tube.check_out(id: 10, station_name: 'Waterloo', time: 2)
+    expect { tube.check_out(id: 10, station_name: 'Waterloo', time: 3) }.to raise_error(CheckOutError)
   end
-  it 'properly checks out a customer' do
-  end
-  it 'properly gets average distance' do
+
+  it 'raies NoValidTripsError if there are no valid trips' do
+    tube = UndergroundSystem.new
+
+    expect { tube.get_average_time(start_station: 'Leyton', end_station: 'Waterloo') }.to raise_error(NoValidTripsError)
   end
 end
